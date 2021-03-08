@@ -152,7 +152,7 @@ def lum_den(lum, lum1, phi1, alpha):
     # To calculate rho(0.001L*)
     nor_lum = np.linspace(0.001*lum1, np.max(lum), 10000)
     nor_sc1 = schechter(nor_lum, lum1=lum1, phi1=phi1, alpha=alpha)
-    nor_sc = nor_lum*nor_sc1/phi1
+    nor_sc = nor_lum*nor_sc1#/phi1
     rho_nor = inte.simps(nor_sc, nor_lum)
     return rho_nor
 
