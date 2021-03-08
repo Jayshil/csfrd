@@ -202,8 +202,6 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
                 nor_sc = nor_lum*nor_sc1/phi2[j]
                 rho_nor = inte.simps(nor_sc, nor_lum)
                 rho2 = np.hstack((rho2, rho_nor))
-    plt.hist(rho2)
-    plt.show()
     return np.mean(rho2), np.std(rho2)
 
 
