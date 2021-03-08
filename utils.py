@@ -70,3 +70,30 @@ def schechter(lum, phi1, lum1, alpha):
     xy = ab*cd*expp
     return xy
 
+def schechter_mag(M, phi1, m1, alpha):
+    """
+    The Schechter Function
+    as described above.
+    -------------------
+    Parameters:
+    -----------
+    M : float, or numpy.ndarray
+        absolute magnitude of the galaxies
+    phi1 : float
+        normalisation constant
+    m1 : float
+        the characteristic absolute magnitude
+    alpha : float
+        the faint-end slope of power-law function
+    -----------
+    returns
+    -----------
+    float or numpy.ndarray
+        number of galaxies in given absolute magnitude range
+    """
+    m2 = 0.4*(m1-M)
+    ab = 0.921*phi1
+    cd = 10**(m2*(alpha+1))
+    ef = np.exp(-10**m2)
+    xxy = ab*cd*ef
+    return xxy
