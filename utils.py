@@ -40,3 +40,33 @@ def l_to_m(l):
     m2 = l/(4*np.pi*d1*d1)
     m1 = -2.5*np.log10(m2) + 48.6
     return m1
+
+
+
+def schechter(lum, phi1, lum1, alpha):
+    """
+    The Schechter Function
+    ----------------------
+    Paramters:
+    ----------
+    lum : float, numpy.ndarray
+        input luminosities of the galaxies
+    phi1 : float
+        normalisation constant
+    lum1 : float
+        characteristic luminosity
+        the 'knee' of the function
+    alpha : float
+        the faint-end slope of power-law function
+    ----------
+    returns:
+    ----------
+    float or numpy.ndarray
+        number of galaxies in given luminosity range
+    """
+    ab = phi1/lum1
+    cd = (lum/lum1)**alpha
+    expp = np.exp(-(lum/lum1))
+    xy = ab*cd*expp
+    return xy
+
