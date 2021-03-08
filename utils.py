@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.integrate as inte
+from tqdm import tqdm
 
 def m_to_l(m):
     """
@@ -153,3 +154,92 @@ def lum_den(lum, lum1, phi1, alpha):
     nor_sc = nor_lum*nor_sc1/phi1
     rho_nor = inte.simps(nor_sc, nor_lum)
     return rho_nor
+
+
+def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
+    """
+    Function to calculate luminosity density
+    ----------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    phi1 : float
+        normalisation constant
+    phi1err : float
+        Error in normalisation constant
+    lum1 : float
+        characteristic luminosity
+        the 'knee' of the function
+    lum1err : float
+        Error in characteristic luminosity
+    alpha : float
+        the faint-end slope of power law
+    alphaerr : float
+        Error in the faint-end slope of power law
+    -----------
+    return
+    -----------
+    float
+        mean luminosity density
+    float
+        error in luminosity density
+    """
+    # Values of Parameters
+    lum2 = np.random.normal(lum1, lum1err, 100)
+    phi2 = np.random.normal(phi1, phi1err, 100)
+    alp2 = np.random.normal(alpha, alphaerr, 100)
+    # Values of luminosities
+    nor_lum = np.linspace(0.001*lum1, np.max(lum), 10000)
+    # Integration array
+    rho2 = np.array([])
+    # Integration starts
+    for i in tqdm(100):
+        for j in range(100):
+            for k in range(100):
+                nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[j], alpha=alp2[k])
+                nor_sc = nor_lum*nor_sc1/phi2[j]
+                rho_nor = inte.simps(nor_sc, nor_lum)
+                rho2 = np.hstack((rho2, rho_nor))
+    return np.mean(rho2), np.std(rho2)
+
+
+def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, kappaerr):
+    """
+    Function to calculate luminosity density
+    ----------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    phi1 : float
+        normalisation constant
+    phi1err : float
+        Error in normalisation constant
+    lum1 : float
+        characteristic luminosity
+        the 'knee' of the function
+    lum1err : float
+        Error in characteristic luminosity
+    alpha : float
+        the faint-end slope of power law
+    alphaerr : float
+        Error in the faint-end slope of power law
+    kappa : float
+        conversion factor b/w luminosity density and
+        star formation rate
+    kappaerr : float
+        error in kappa
+    -----------
+    return
+    -----------
+    float
+        mean star formation rate
+    float
+        error in star formation rate
+    """
+    ld1, ld_err = lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
+    lum_den2 = np.random.normal(ld1, ld_err, 10000)
+    kpp1 = np.random.normal(kappa, kappaerr, 10000)
+    sfr2 = kpp1*lum_den2
+    return np.mean(sfr2), np.std(sfr2)
