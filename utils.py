@@ -156,6 +156,32 @@ def lum_den(lum, lum1, phi1, alpha):
     rho_nor = inte.simps(nor_sc, nor_lum)
     return rho_nor
 
+def sfrd(lum, lum1, phi1, alpha, kappa):
+    """
+    Function to calculate star formation rate density
+    -------------------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    phi1 : float
+        normalisation constant
+    lum1 : float
+        characteristic luminosity
+        the 'knee' of the function
+    alpha : float
+        the faint-end slope of power law
+    kappa : float
+        conversion factor
+    -----------
+    return
+    -----------
+    float
+        star formation rate density
+    """
+    lum_den2 = lum_den(lum, lum1, phi1, alpha)
+    sfrd2 = kappa*lum_den2
+    return sfrd2
 
 def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
     """
@@ -205,7 +231,7 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
     return np.mean(rho2), np.std(rho2)
 
 
-def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
+def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -242,3 +268,22 @@ def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
+
+def lam_to_nu(lam):
+    """
+    Function to compute frequency (in Hz)
+    from Wavelength (in A)
+    -----------------------
+    Parameters:
+    -----------
+    lam : float
+        wavelength in A
+    -----------
+    returns
+    -----------
+    float :
+        frequency in Hz
+    """
+    lam1 = lam*10**(-10)
+    freq = 299792458/lam1
+    return freq
