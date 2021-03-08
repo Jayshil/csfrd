@@ -241,6 +241,6 @@ def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     """
     ld1, ld_err = lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
     lum_den2 = np.random.normal(ld1, ld_err, 10000)
-    kpp1 = kappa*np.ones(10000)
+    kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
