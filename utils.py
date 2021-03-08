@@ -207,7 +207,7 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
     return np.mean(rho2), np.std(rho2)
 
 
-def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, kappaerr):
+def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -231,8 +231,6 @@ def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, kappaerr):
     kappa : float
         conversion factor b/w luminosity density and
         star formation rate
-    kappaerr : float
-        error in kappa
     -----------
     return
     -----------
@@ -243,6 +241,6 @@ def sfr(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, kappaerr):
     """
     ld1, ld_err = lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
     lum_den2 = np.random.normal(ld1, ld_err, 10000)
-    kpp1 = np.random.normal(kappa, kappaerr, 10000)
+    kpp1 = kappa*np.ones(10000)
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
