@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.integrate as inte
 
 def m_to_l(m):
     """
@@ -124,3 +125,31 @@ def log_schechter(lum, lum1, phi1, alpha):
     bc = 10**((alpha+1)*logg)
     cd = np.exp(-10**logg)
     return ab*bc*cd
+
+def lum_den(lum, lum1, phi1, alpha):
+    """
+    Function to calculate luminosity density
+    ----------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    phi1 : float
+        normalisation constant
+    lum1 : float
+        characteristic luminosity
+        the 'knee' of the function
+    alpha : float
+        the faint-end slope of power law
+    -----------
+    return
+    -----------
+    float
+        luminosity density
+    """
+    # To calculate rho(0.001L*)
+    nor_lum = np.linspace(0.001*lum1, np.max(lum), 10000)
+    nor_sc1 = schechter(nor_lum, lum1=lum1, phi1=phi1, alpha=alpha)
+    nor_sc = nor_lum*nor_sc1/phi1
+    rho_nor = inte.simps(nor_sc, nor_lum)
+    return rho_nor
