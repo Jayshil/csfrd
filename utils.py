@@ -20,7 +20,7 @@ def m_to_l(m):
     """
     d1 = 10*3.0857*10**18
     abc = 4*np.pi*(d1*d1)
-    expp = 10**(-0.4*(m-48.6))
+    expp = 10**(-0.4*(m+48.6))
     l1 = abc*expp
     return l1
 
@@ -41,7 +41,7 @@ def l_to_m(l):
     """
     d1 = 10*3.0857*10**18
     m2 = l/(4*np.pi*d1*d1)
-    m1 = -2.5*np.log10(m2) + 48.6
+    m1 = -2.5*np.log10(m2) - 48.6
     return m1
 
 
