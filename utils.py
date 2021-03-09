@@ -3,6 +3,25 @@ import matplotlib.pyplot as plt
 import scipy.integrate as inte
 from tqdm import tqdm
 
+def lam_to_nu(lam):
+    """
+    Function to compute frequency (in Hz)
+    from Wavelength (in A)
+    -----------------------
+    Parameters:
+    -----------
+    lam : float
+        wavelength in A
+    -----------
+    returns
+    -----------
+    float :
+        frequency in Hz
+    """
+    lam1 = lam*10**(-10)
+    freq = 299792458/lam1
+    return freq
+
 def m_to_l(m):
     """
     To transform absolute magnitude to
@@ -22,6 +41,29 @@ def m_to_l(m):
     abc = 4*np.pi*(d1*d1)
     expp = 10**(-0.4*(m+48.6))
     l1 = abc*expp
+    return l1
+
+def m_to_l_wave(m, lam):
+    """
+    To transform absolute magnitude to
+    luminosity in cgs units
+    -----------------------
+    Parameters:
+    -----------
+    m : float, numpy.ndarray
+        Absolute Magnitude
+    lam : float
+        Wavelength in A
+    -----------
+    returns:
+    -----------
+    l : float, numpy.ndarray
+        Luminosity
+    """
+    d1 = 10*3.0857*10**18
+    abc = 4*np.pi*(d1*d1)
+    expp = 10**(-0.4*(m+48.6))
+    l1 = abc*expp*lam_to_nu(lam)
     return l1
 
 def l_to_m(l):
@@ -268,22 +310,3 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
-
-def lam_to_nu(lam):
-    """
-    Function to compute frequency (in Hz)
-    from Wavelength (in A)
-    -----------------------
-    Parameters:
-    -----------
-    lam : float
-        wavelength in A
-    -----------
-    returns
-    -----------
-    float :
-        frequency in Hz
-    """
-    lam1 = lam*10**(-10)
-    freq = 299792458/lam1
-    return freq
