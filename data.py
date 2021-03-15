@@ -8,7 +8,6 @@ a = True
 
 while a:
     paper = input('Enter the name of the paper: ')
-    paper2 = 
     f1 = open(p2 + 'data_' + paper.replace(' ',''))
     f1.write('#Redshift\t M* \t M*_err\t Phi* \t Phi*_err\t Alpha\t Alpha_err\n')
     z = input('Enter redshift: ')
