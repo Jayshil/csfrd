@@ -29,5 +29,5 @@ while b:
             a = False
     f1.close()
     abc = input('Do you want to continue? (/NO): ')
-    if abc == 'n':
+    if abc == 'NO':
         b = False
