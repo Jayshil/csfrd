@@ -303,15 +303,15 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
         error in luminosity density
     """
     # Values of Parameters
-    lum2 = np.random.normal(lum1, lum1err, 100000)
-    phi2 = np.random.normal(phi1, phi1err, 100000)
-    alp2 = np.random.normal(alpha, alphaerr, 100000)
+    lum2 = np.random.normal(lum1, lum1err, 10000)
+    phi2 = np.random.normal(phi1, phi1err, 10000)
+    alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Values of luminosities
     nor_lum = np.linspace(0.03*lum1, np.max(lum), 10000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
-    for i in tqdm(range(100000)):
+    for i in tqdm(range(10000)):
         nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
         nor_sc = nor_lum*nor_sc1#/phi2[j]
         rho_nor = inte.simps(nor_sc, nor_lum)
@@ -355,5 +355,4 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     lum_den2 = np.random.normal(ld1, ld_err, 10000)
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
-    log_sfr = np.log10(sfr2)
-    return np.mean(log_sfr), np.std(log_sfr)
+    return np.mean(sfr2), np.std(sfr2)
