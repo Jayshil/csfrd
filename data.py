@@ -11,7 +11,7 @@ b = True
 
 while b:
     paper = input('Enter the name of the paper: ')
-    f1 = open(p2 + 'data_' + paper.replace(' ','') + '.dat', 'w')
+    f1 = open(p2 + 'data_UV_' + paper.replace(' ','') + '.dat', 'w')
     f1.write('#z\t z_err\t M* \t M*_err\t Phi* \t Phi*_err\t Alpha\t Alpha_err\t NameOfPaper\n')
     a = True
     while a:
