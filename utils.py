@@ -259,7 +259,7 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
     phi2 = np.random.normal(phi1, phi1err, 50)
     alp2 = np.random.normal(alpha, alphaerr, 50)
     # Values of luminosities
-    nor_lum = np.linspace(0.001*lum1, np.max(lum), 10000)
+    nor_lum = np.linspace(0.03*lum1, np.max(lum), 10000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
@@ -351,7 +351,7 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     float
         error in star formation rate
     """
-    ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
+    ld1, ld_err = lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
     lum_den2 = np.random.normal(ld1, ld_err, 10000)
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
