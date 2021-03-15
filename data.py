@@ -1,7 +1,11 @@
 import numpy as np
 import os
 
-os.mkdir(os.getcwd() + '/data/')
+try:
+    os.mkdir(os.getcwd() + '/data/')
+except:
+    continue
+
 p2 = os.getcwd() + '/data/'
 
 a = True
