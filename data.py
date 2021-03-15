@@ -11,7 +11,7 @@ a = True
 
 while a:
     paper = input('Enter the name of the paper: ')
-    f1 = open(p2 + 'data_' + paper.replace(' ',''))
+    f1 = open(p2 + 'data_' + paper.replace(' ',''), 'w')
     f1.write('#Redshift\t M* \t M*_err\t Phi* \t Phi*_err\t Alpha\t Alpha_err\n')
     z = input('Enter redshift: ')
     z_err = input('Enter the error in redshift: ')
