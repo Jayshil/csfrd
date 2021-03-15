@@ -24,5 +24,5 @@ while a:
     f1.write(z + '\t' + z_err + '\t' + mag + '\t' + mag_err + '\t' + phi + '\t' + phi_err + '\t' + alp + '\t' + alp_err + '\t' + paper.replace(' ','') + '\n')
     f1.close()
     abc = input('Do you want to continue? (Y/n): ')
-    if abc == 'Y':
+    if abc == 'n':
         a = False
