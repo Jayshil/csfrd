@@ -3,10 +3,9 @@ import os
 
 try:
     os.mkdir(os.getcwd() + '/data/')
+    p2 = os.getcwd() + '/data/'
 except:
-    continue
-
-p2 = os.getcwd() + '/data/'
+    p2 = os.getcwd() + '/data/'
 
 a = True
 
