@@ -356,3 +356,23 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
+
+def log_err(para, err):
+    """
+    To calculate the log err
+    ------------------------
+    Parameters:
+    -----------
+    para : float, numpy.ndarray
+        given parameter
+    err : float, numpy.ndarray
+        error in the given parameter
+    -----------
+    return
+    -----------
+    float, numpy.ndarray:
+        log10 parameter and error in it
+    """
+    ab = err/para
+    bc = 1/(np.log(10))
+    return np.log10(para), ab*bc
