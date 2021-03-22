@@ -86,7 +86,29 @@ def l_to_m(l):
     m1 = -2.5*np.log10(m2) - 48.6
     return m1
 
+def log_err(para, err):
+    """
+    To calculate the log err
+    ------------------------
+    Parameters:
+    -----------
+    para : float, numpy.ndarray
+        given parameter
+    err : float, numpy.ndarray
+        error in the given parameter
+    -----------
+    return
+    -----------
+    float, numpy.ndarray:
+        log10 parameter and error in it
+    """
+    ab = err/para
+    bc = 1/(np.log(10))
+    return np.log10(para), ab*bc
 
+#----------------------------------------------------------
+#---------Different Schechter functions -------------------
+#----------------------------------------------------------
 
 def schechter(lum, phi1, lum1, alpha):
     """
@@ -170,7 +192,11 @@ def log_schechter(lum, lum1, phi1, alpha):
     cd = np.exp(-10**logg)
     return ab*bc*cd
 
-def lum_den(lum, lum1, phi1, alpha):
+#-----------------------------------------------------------
+#-------------- Calculating SFRD ---------------------------
+#-----------------------------------------------------------
+
+def lum_den(lum, lum1, phi1, alpha, limit=0.03):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -185,6 +211,10 @@ def lum_den(lum, lum1, phi1, alpha):
         the 'knee' of the function
     alpha : float
         the faint-end slope of power law
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)
     -----------
     return
     -----------
@@ -192,13 +222,13 @@ def lum_den(lum, lum1, phi1, alpha):
         luminosity density
     """
     # To calculate rho(0.001L*)
-    nor_lum = np.linspace(0.03*lum1, np.max(lum), 10000)
+    nor_lum = np.linspace(limit*lum1, np.max(lum), 10000)
     nor_sc1 = schechter(nor_lum, lum1=lum1, phi1=phi1, alpha=alpha)
     nor_sc = nor_lum*nor_sc1#/phi1
     rho_nor = inte.simps(nor_sc, nor_lum)
     return rho_nor
 
-def sfrd(lum, lum1, phi1, alpha, kappa):
+def sfrd_wo_err(lum, lum1, phi1, alpha, kappa, limit=0.03):
     """
     Function to calculate star formation rate density
     -------------------------------------------------
@@ -215,17 +245,22 @@ def sfrd(lum, lum1, phi1, alpha, kappa):
         the faint-end slope of power law
     kappa : float
         conversion factor
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)
     -----------
     return
     -----------
     float
         star formation rate density
     """
-    lum_den2 = lum_den(lum, lum1, phi1, alpha)
+    lum_den2 = lum_den(lum, lum1, phi1, alpha, limit)
     sfrd2 = kappa*lum_den2
     return sfrd2
 
-def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
+
+def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -246,6 +281,10 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
         the faint-end slope of power law
     alphaerr : float
         Error in the faint-end slope of power law
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)s
     -----------
     return
     -----------
@@ -255,71 +294,26 @@ def lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
         error in luminosity density
     """
     # Values of Parameters
-    lum2 = np.random.normal(lum1, lum1err, 50)
-    phi2 = np.random.normal(phi1, phi1err, 50)
-    alp2 = np.random.normal(alpha, alphaerr, 50)
+    lum2 = np.random.normal(lum1, lum1err, 100000)
+    phi2 = np.random.normal(phi1, phi1err, 100000)
+    alp2 = np.random.normal(alpha, alphaerr, 100000)
     # Values of luminosities
-    nor_lum = np.linspace(0.03*lum1, np.max(lum), 10000)
+    nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
-    for i in tqdm(range(50)):
-        for j in range(50):
-            for k in range(50):
-                nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[j], alpha=alp2[k])
-                nor_sc = nor_lum*nor_sc1#/phi2[j]
-                rho_nor = inte.simps(nor_sc, nor_lum)
-                rho2 = np.hstack((rho2, rho_nor))
+    for i in tqdm(range(100000)):
+        if np.abs(alp2[i]) < 0.001:
+            continue
+        else:
+            nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
+            nor_sc = nor_lum*nor_sc1#/phi2[j]
+            rho_nor = inte.simps(nor_sc, nor_lum)
+            rho2 = np.hstack((rho2, rho_nor))
     return np.mean(rho2), np.std(rho2)
 
 
-def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr):
-    """
-    Function to calculate luminosity density
-    ----------------------------------------
-    Parameters:
-    -----------
-    lum : float, numpy.ndarray
-        luminosity range
-    phi1 : float
-        normalisation constant
-    phi1err : float
-        Error in normalisation constant
-    lum1 : float
-        characteristic luminosity
-        the 'knee' of the function
-    lum1err : float
-        Error in characteristic luminosity
-    alpha : float
-        the faint-end slope of power law
-    alphaerr : float
-        Error in the faint-end slope of power law
-    -----------
-    return
-    -----------
-    float
-        mean luminosity density
-    float
-        error in luminosity density
-    """
-    # Values of Parameters
-    lum2 = np.random.normal(lum1, lum1err, 10000)
-    phi2 = np.random.normal(phi1, phi1err, 10000)
-    alp2 = np.random.normal(alpha, alphaerr, 10000)
-    # Values of luminosities
-    nor_lum = np.linspace(0.03*lum1, np.max(lum), 10000)
-    # Integration array
-    rho2 = np.array([])
-    # Integration starts
-    for i in tqdm(range(10000)):
-        nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
-        nor_sc = nor_lum*nor_sc1#/phi2[j]
-        rho_nor = inte.simps(nor_sc, nor_lum)
-        rho2 = np.hstack((rho2, rho_nor))
-    return np.mean(rho2), np.std(rho2)
-
-
-def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
+def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=0.03):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -343,6 +337,10 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     kappa : float
         conversion factor b/w luminosity density and
         star formation rate
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)
     -----------
     return
     -----------
@@ -351,28 +349,8 @@ def sfrd1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa):
     float
         error in star formation rate
     """
-    ld1, ld_err = lum_den1(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr)
+    ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
     lum_den2 = np.random.normal(ld1, ld_err, 10000)
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
-
-def log_err(para, err):
-    """
-    To calculate the log err
-    ------------------------
-    Parameters:
-    -----------
-    para : float, numpy.ndarray
-        given parameter
-    err : float, numpy.ndarray
-        error in the given parameter
-    -----------
-    return
-    -----------
-    float, numpy.ndarray:
-        log10 parameter and error in it
-    """
-    ab = err/para
-    bc = 1/(np.log(10))
-    return np.log10(para), ab*bc
