@@ -196,7 +196,7 @@ def log_schechter(lum, lum1, phi1, alpha):
 #-------------- Calculating SFRD ---------------------------
 #-----------------------------------------------------------
 
-def lum_den(lum, lum1, phi1, alpha, limit=0.03):
+def lum_den(lum, lum1, phi1, alpha, limit=0.03, Auv=0.0):
     """
     Function to calculate luminosity density
     ----------------------------------------
@@ -215,20 +215,25 @@ def lum_den(lum, lum1, phi1, alpha, limit=0.03):
         lower limit of the intensity
         as a function of L*
         default is 0.03 (from Madau&Dickinson)
+    Auv : float
+        dust correction (in mag)
+        default is 0.0
     -----------
     return
     -----------
     float
         luminosity density
     """
+    # Dust correction in luminosity
+    l_uv = 10**(0.4*Auv)
     # To calculate rho(0.001L*)
     nor_lum = np.linspace(limit*lum1, np.max(lum), 10000)
     nor_sc1 = schechter(nor_lum, lum1=lum1, phi1=phi1, alpha=alpha)
     nor_sc = nor_lum*nor_sc1#/phi1
-    rho_nor = inte.simps(nor_sc, nor_lum)
+    rho_nor = (inte.simps(nor_sc, nor_lum))*l_uv
     return rho_nor
 
-def sfrd_wo_err(lum, lum1, phi1, alpha, kappa, limit=0.03):
+def sfrd_wo_err(lum, lum1, phi1, alpha, kappa, limit=0.03, Auv=0.0):
     """
     Function to calculate star formation rate density
     -------------------------------------------------
@@ -248,14 +253,17 @@ def sfrd_wo_err(lum, lum1, phi1, alpha, kappa, limit=0.03):
     limit : float
         lower limit of the intensity
         as a function of L*
-        default is 0.03 (from Madau&Dickinson)
+        default is 0.03 (from Madau & Dickinson)
+    Auv : float
+        dust correction (in mag)
+        default is 0.0
     -----------
     return
     -----------
     float
         star formation rate density
     """
-    lum_den2 = lum_den(lum, lum1, phi1, alpha, limit)
+    lum_den2 = lum_den(lum, lum1, phi1, alpha, limit, Auv)
     sfrd2 = kappa*lum_den2
     return sfrd2
 
@@ -294,15 +302,15 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
         error in luminosity density
     """
     # Values of Parameters
-    lum2 = np.random.normal(lum1, lum1err, 100000)
-    phi2 = np.random.normal(phi1, phi1err, 100000)
-    alp2 = np.random.normal(alpha, alphaerr, 100000)
+    lum2 = np.random.normal(lum1, lum1err, 10000)
+    phi2 = np.random.normal(phi1, phi1err, 10000)
+    alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Values of luminosities
     nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
-    for i in tqdm(range(100000)):
+    for i in tqdm(range(10000)):
         if np.abs(alp2[i]) < 0.001:
             continue
         else:
