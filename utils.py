@@ -132,9 +132,9 @@ def schechter(lum, phi1, lum1, alpha):
     float or numpy.ndarray
         number of galaxies in given luminosity range
     """
-    ab = phi1/lum1
-    cd = np.sign(lum1/lum)*(np.abs(lum1/lum))**np.abs(alpha)
-    expp = np.exp(-(lum/lum1))
+    ab = np.abs(phi1/lum1)
+    cd = (np.abs(lum/lum1))**alpha
+    expp = np.exp(-np.abs(lum/lum1))
     xy = ab*cd*expp
     return xy
 
@@ -314,7 +314,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     """
     f1 = open(os.getcwd() + '/alp_' + str(alpha) + '_' + str(phi1) + '.dat', 'w')
     for i in range(len(alp2)):
-        f1.write(str(alp2[i]) + '\n')
+        f1.write(str(alp2[i]) + '\t' + str(lum2[i]) + '\t' + str(phi2[i]) + '\n')
     f1.close()
     # Values of luminosities
     nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
