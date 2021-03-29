@@ -133,7 +133,7 @@ def schechter(lum, phi1, lum1, alpha):
         number of galaxies in given luminosity range
     """
     ab = phi1/lum1
-    cd = (lum/lum1)**alpha
+    cd = (lum1/lum)**np.abs(alpha)
     expp = np.exp(-(lum/lum1))
     xy = ab*cd*expp
     return xy
@@ -303,10 +303,11 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
         error in luminosity density
     """
     # Values of Parameters
-    lum22 = np.random.normal(lum1, lum1err, 10000)
-    phi22 = np.random.normal(phi1, phi1err, 10000)
-    alp22 = np.random.normal(alpha, alphaerr, 10000)
+    lum2 = np.random.normal(lum1, lum1err, 10000)
+    phi2 = np.random.normal(phi1, phi1err, 10000)
+    alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Use only certain precision
+    """
     lum2 = np.around(lum22, 5)
     phi2 = np.around(phi22, 5)
     alp2 = np.around(alp22, 5)
@@ -314,6 +315,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     for i in range(len(alp2)):
         f1.write(str(alp2[i]) + '\n')
     f1.close()
+    """
     # Values of luminosities
     nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
     # Integration array
