@@ -357,8 +357,11 @@ def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=
     float
         error in star formation rate
     """
-    ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
-    lum_den2 = np.random.normal(ld1, ld_err, 10000)
-    kpp1 = kappa
-    sfr2 = kpp1*lum_den2
+    try:
+        ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
+        lum_den2 = np.random.normal(ld1, ld_err, 10000)
+        kpp1 = kappa
+        sfr2 = kpp1*lum_den2
+    except:
+        sfr2 = np.zeros(len(10000))
     return np.mean(sfr2), np.std(sfr2)
