@@ -132,7 +132,7 @@ def schechter(lum, phi1, lum1, alpha):
     float or numpy.ndarray
         number of galaxies in given luminosity range
     """
-    ab = phi1/lum1
+    ab = phi1/np.abs(lum1)
     cd = (np.abs(lum/lum1))**alpha
     expp = np.exp(-np.abs(lum/lum1))
     xy = ab*cd*expp
