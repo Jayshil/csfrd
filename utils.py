@@ -311,18 +311,19 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     lum2 = np.around(lum22, 5)
     phi2 = np.around(phi22, 5)
     alp2 = np.around(alp22, 5)
-    """
+    
     f1 = open(os.getcwd() + '/alp_' + str(alpha) + '_' + str(phi1) + '.dat', 'w')
     for i in range(len(alp2)):
         f1.write(str(alp2[i]) + '\t' + str(lum2[i]) + '\t' + str(phi2[i]) + '\n')
     f1.close()
+    """
     # Values of luminosities
     nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
     for i in tqdm(range(10000)):
-        if alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
+        if lum2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
             nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
