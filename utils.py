@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate as inte
 from tqdm import tqdm
+import os
 
 def lam_to_nu(lam):
     """
@@ -131,9 +132,9 @@ def schechter(lum, phi1, lum1, alpha):
     float or numpy.ndarray
         number of galaxies in given luminosity range
     """
-    ab = phi1/lum1
-    cd = (lum/lum1)**alpha
-    expp = np.exp(-(lum/lum1))
+    ab = phi1/np.abs(lum1)
+    cd = (np.abs(lum/lum1))**alpha
+    expp = np.exp(-np.abs(lum/lum1))
     xy = ab*cd*expp
     return xy
 
@@ -296,29 +297,40 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     -----------
     return
     -----------
-    float
-        mean luminosity density
-    float
-        error in luminosity density
+    numpy.ndarray :
+        an array of luminosity density
     """
     # Values of Parameters
     lum2 = np.random.normal(lum1, lum1err, 10000)
     phi2 = np.random.normal(phi1, phi1err, 10000)
     alp2 = np.random.normal(alpha, alphaerr, 10000)
+    # Use only certain precision
+    """
+    lum2 = np.around(lum22, 5)
+    phi2 = np.around(phi22, 5)
+    alp2 = np.around(alp22, 5)
+    
+    f1 = open(os.getcwd() + '/alp_' + str(alpha) + '_' + str(phi1) + '.dat', 'w')
+    for i in range(len(alp2)):
+        f1.write(str(alp2[i]) + '\t' + str(lum2[i]) + '\t' + str(phi2[i]) + '\n')
+    f1.close()
+    """
     # Values of luminosities
     nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
     for i in tqdm(range(10000)):
-        if np.abs(alp2[i]) < 0.001:
+        if lum2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
             nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(nor_sc, nor_lum)
             rho2 = np.hstack((rho2, rho_nor))
-    return np.mean(rho2), np.std(rho2)
+    print("\nlength: ")
+    print(len(rho2))
+    return rho2
 
 
 def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=0.03):
@@ -357,8 +369,7 @@ def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=
     float
         error in star formation rate
     """
-    ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
-    lum_den2 = np.random.normal(ld1, ld_err, 10000)
+    lum_den2 = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
