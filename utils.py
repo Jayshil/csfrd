@@ -297,10 +297,8 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     -----------
     return
     -----------
-    float
-        mean luminosity density
-    float
-        error in luminosity density
+    numpy.ndarray :
+        an array of luminosity density
     """
     # Values of Parameters
     lum2 = np.random.normal(lum1, lum1err, 10000)
@@ -332,7 +330,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
             rho2 = np.hstack((rho2, rho_nor))
     print("\nlength: ")
     print(len(rho2))
-    return np.mean(rho2), np.std(rho2)
+    return rho2
 
 
 def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=0.03):
@@ -371,8 +369,7 @@ def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=
     float
         error in star formation rate
     """
-    ld1, ld_err = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
-    lum_den2 = np.random.normal(ld1, ld_err, 10000)
+    lum_den2 = lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit)
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
