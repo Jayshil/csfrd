@@ -373,3 +373,35 @@ def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
+
+
+def asymmetric_gausian_distribution(mean, std1, std2, size):
+    """
+    To compute asymmetric gaussian distribution
+    ------------------------------------------
+    Parameters:
+    -----------
+    mean : float
+        mean of the distribution
+    std1 : float
+        positive standard deviation of the distribution
+    std2 : float
+        negative standard deviation of the distribution
+    size : int
+        size of the distribution
+    -----------
+    return
+    -----------
+    numpy.ndarray
+        random asymmetric distribution
+    """
+    d1 = np.random.normal(mean, std1, size)
+    d2 = np.random.normal(mean, std2, size)
+    d3 = np.array([])
+    for i in range(size):
+        if d1[i] > mean:
+            d3 = np.hstack((d3, d1[i]))
+        if d2[i] < mean:
+            d3 = np.hstack((d3, d2[i]))
+    d4 = np.sort(d3)
+    return d4
