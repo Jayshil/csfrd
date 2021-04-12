@@ -1,4 +1,5 @@
 from numpy import linalg as la
+import numpy as np
 
 def nearestPD(A):
     """Find the nearest positive-definite matrix to input
