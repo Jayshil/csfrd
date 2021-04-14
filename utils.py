@@ -395,13 +395,10 @@ def asymmetric_gausian_distribution(mean, std1, std2, size):
     numpy.ndarray
         random asymmetric distribution
     """
-    d1 = np.random.normal(mean, std1, size)
-    d2 = np.random.normal(mean, std2, size)
-    d3 = np.array([])
-    for i in range(size):
-        if d1[i] > mean:
-            d3 = np.hstack((d3, d1[i]))
-        if d2[i] < mean:
-            d3 = np.hstack((d3, d2[i]))
-    d4 = np.sort(d3)
-    return d4
+    d1 = np.random.normal(mean, std1, 2*size)
+    d2 = np.random.normal(mean, std2, 2*size)
+    up = d1[d1>mean][:int(size/2)]
+    dn = d2[d2<mean][:int(size/2)]
+    d3 = np.concatenate((dn, up))
+    np.random.shuffle(d3)
+    return d3
