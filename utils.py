@@ -328,8 +328,8 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(nor_sc, nor_lum)
             rho2 = np.hstack((rho2, rho_nor))
-    print("\nlength: ")
-    print(len(rho2))
+    #print("\nlength: ")
+    #print(len(rho2))
     return rho2
 
 
