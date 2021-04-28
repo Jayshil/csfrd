@@ -2,10 +2,10 @@ import numpy as np
 import os
 
 try:
-    os.mkdir(os.getcwd() + '/data/')
-    p2 = os.getcwd() + '/data/'
+    os.mkdir(os.getcwd())
+    p2 = os.getcwd()
 except:
-    p2 = os.getcwd() + '/data/'
+    p2 = os.getcwd()
 
 b = True
 
