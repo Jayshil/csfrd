@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import posdef as pdf
-
+import utils as utl
 
 # Data of covariance matrices
 def covz(z):
@@ -78,3 +78,35 @@ def covar(z, err):
         for j in range(3):
             cov_new[i][j] = corr[i][j] * err[i] * err[j]
     return cov_new
+
+
+def corr_para(z, means, err, size=10000):
+    """
+    To generate correlated samples
+    ------------------------------
+    Parameters
+    ----------
+    z : float, int
+        redshift of the object
+    means : numpy.ndarray
+        means of the parameters (M*, logphi, alpha)
+    err : numpy.ndarray
+        uncertainties in the parameters (M*, logphi, alpha)
+    size : numpy.ndarray
+        size of the returned array
+    ----------
+    returns
+    ----------
+    numpy.ndarray:
+        correlated samples of L*
+    numpy.ndarray:
+        correlated samples of phi*
+    numpy.ndarray:
+        correlated samples of alpha
+    """
+    covs = covar(z, err)
+    samples1 = np.random.multivariate_normal(means, covs, size=size)
+    lum_z = utl.m_to_l_wave(samples1.T[0], 1500)
+    phi_z = 10**samples1.T[1]
+    alp_z = samples1.T[2]
+    return lum_z, phi_z, alp_z
