@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import posdef as pdf
 import utils as utl
+from tqdm import tqdm
+import scipy.integrate as inte
 
 # Data of covariance matrices
 def covz(z):
@@ -110,3 +112,84 @@ def corr_para(z, means, err, size=10000):
     phi_z = 10**samples1.T[1]
     alp_z = samples1.T[2]
     return lum_z, phi_z, alp_z
+
+# -------------------
+# Functions to compute rho and SFRD from correlated samples
+# -------------------
+
+def lum_den22(lum, z, mean1, err1, limit=0.03):
+    """
+    Function to calculate luminosity density
+    ----------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    z : float, int
+        redshift of the object
+    mean1 : numpy.ndarray
+        means of the parameters M*, logPhi* and alpha
+    err1 : numpy.ndarray
+        uncertainty array of the parameters
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)s
+    -----------
+    return
+    -----------
+    numpy.ndarray
+        an array of luminosity density
+    """
+    # Values of Parameters
+    lum2, phi2, alp2 = corr_para(z=z, means=mean1, err=err1)
+    lum1 = utl.m_to_l_wave(mean1[0], 1500)
+    # Values of luminosities
+    nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
+    # Integration array
+    rho2 = np.array([])
+    # Integration starts
+    for i in tqdm(range(10000)):
+        if lum2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
+            continue
+        else:
+            nor_sc1 = utl.schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
+            nor_sc = nor_lum*nor_sc1#/phi2[j]
+            rho_nor = inte.simps(nor_sc, nor_lum)
+            rho2 = np.hstack((rho2, rho_nor))
+    return rho2
+
+
+def sfrd_w_err(lum, z, mean2, err2, kappa, limit=0.03):
+    """
+    Function to calculate luminosity density
+    ----------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    z : float, int
+        redshift of the object
+    mean2 : numpy.ndarray
+        means of the parameters M*, logPhi* and alpha
+    err2 : numpy.ndarray
+        uncertainty of the parameters
+    kappa : float
+        conversion factor b/w luminosity density and
+        star formation rate
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)
+    -----------
+    return
+    -----------
+    float
+        mean star formation rate
+    float
+        error in star formation rate
+    """
+    lum_den2 = lum_den22(lum, z, mean2, err2, limit)
+    kpp1 = kappa
+    sfr2 = kpp1*lum_den2
+    return np.mean(sfr2), np.std(sfr2)
