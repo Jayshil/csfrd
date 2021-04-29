@@ -29,6 +29,10 @@ plt.figure(figsize=(16,9))
 for i in range(len(list_uv)):
     z1_uv, z2_uv, mst_uv, msterr_uv, phi_uv, phierr_uv, alp_uv, alperr_uv = np.loadtxt(p1 + list_uv[i], usecols=(0,1,2,3,4,5,6,7), unpack=True)
     ppr_n = np.loadtxt(p1 + list_uv[i], usecols=8, dtype=str, unpack=True)
+    
+    print('-------------------------------------------------------------')
+    print('Working on: ' + ppr_n[0])
+    print('-------------------------------------------------------------')
     #
     # This is because some of the data file has only one rows
     # and numpy read them as numpy.float64 object, not as numpy.ndarray
@@ -40,16 +44,6 @@ for i in range(len(list_uv)):
                np.array([phi_uv]), np.array([phierr_uv]), np.array([alp_uv]), np.array([alperr_uv]), np.array([ppr_n])
     else:
         lngth = len(mst_uv)
-    #
-    # Converting Magnitudes into luminosities
-    #
-    lst_uv = np.zeros(lngth)
-    lsterr_uv = np.zeros(lngth)
-    for k in range(lngth):
-        mst1 = np.random.normal(mst_uv[k], msterr_uv[k], 10000)
-        lst1 = utl.m_to_l_wave(mst1, 1500)
-        lst_uv[i] = np.mean(lst1)
-        lsterr_uv[i] = np.std(lst1)
     #
     # Calculating SFRD
     #
