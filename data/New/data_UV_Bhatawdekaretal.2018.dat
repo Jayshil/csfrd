@@ -1,0 +1,5 @@
+#z	 z_err	 M* 	 M*_err	 Phi* 	 Phi*_err	 Alpha	 Alpha_err	 NameOfPaper
+6	6	-20.94	0.285	2.01e-4	0.725e-4	-2.03	0.11	Bhatawdekar_et_al._2018
+7	7	-20.85	0.39	1.70e-4	0.95e-4	-2.06	0.16	Bhatawdekar_et_al._2018
+8	8	-20.40	0.53	1.49e-4	1.33e-4	-2.14	0.345	Bhatawdekar_et_al._2018
+9	9	-20.40	0	0.98e-4	1.125e-4	-2.20	0.49	Bhatawdekar_et_al._2018
