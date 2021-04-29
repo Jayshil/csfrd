@@ -75,8 +75,8 @@ def covar(z, err):
     covz1 = covz(zz)
     # Correlation matrix
     corr = np.zeros((3,3))
-    for i in range(len(3)):
-        for j in range(len(3)):
+    for i in range(3):
+        for j in range(3):
             corr[i][j] = covz1[i][j] / np.sqrt(covz1[i][i] * covz1[j][j])
     # Covariance matrix
     cov_new = np.zeros((3,3))
