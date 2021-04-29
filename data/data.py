@@ -1,11 +1,8 @@
 import numpy as np
 import os
 
-try:
-    os.mkdir(os.getcwd() + '/New/')
-    p2 = os.getcwd() + '/New/'
-except:
-    p2 = os.getcwd()
+
+p2 = os.getcwd() + '/New/'
 
 b = True
 
