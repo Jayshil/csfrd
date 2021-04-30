@@ -29,10 +29,6 @@ plt.figure(figsize=(16,9))
 for i in range(len(list_uv)):
     z1_uv, z2_uv, mst_uv, msterr_uv, phi_uv, phierr_uv, alp_uv, alperr_uv = np.loadtxt(p1 + list_uv[i], usecols=(0,1,2,3,4,5,6,7), unpack=True)
     ppr_n = np.loadtxt(p1 + list_uv[i], usecols=8, dtype=str, unpack=True)
-    
-    print('-------------------------------------------------------------')
-    print('Working on: ' + ppr_n[0])
-    print('-------------------------------------------------------------')
     #
     # This is because some of the data file has only one rows
     # and numpy read them as numpy.float64 object, not as numpy.ndarray
@@ -44,6 +40,10 @@ for i in range(len(list_uv)):
                np.array([phi_uv]), np.array([phierr_uv]), np.array([alp_uv]), np.array([alperr_uv]), np.array([ppr_n])
     else:
         lngth = len(mst_uv)
+    #
+    print('-------------------------------------------------------------')
+    print('Working on: ' + ppr_n[0])
+    print('-------------------------------------------------------------')
     #
     # Calculating SFRD
     #
