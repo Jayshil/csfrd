@@ -71,9 +71,9 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(y=nor_sc, x=np.log10(nor_lum))
             rho2 = np.hstack((rho2, rho_nor))
-    print("\nlength: ")
-    print(len(rho2))
-    print(np.mean(rho2))
+    #print("\nlength: ")
+    #print(len(rho2))
+    #print(np.mean(rho2))
     return rho2
 
 def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, kappa, limit=0.03):
