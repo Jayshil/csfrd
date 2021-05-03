@@ -58,15 +58,24 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     alp2 = np.random.normal(alp9, alp9, 10000)
     sig2 = np.random.normal(sig9, sig9err, 10000)
     # Values of luminosities
-    nor_lum = np.linspace(limit*lst9, np.max(lum), 100000)
+    nor_lum = np.logspace(np.log10(limit*lst9), np.max(np.log10(lum)), 100000)
+    f1 = open(os.getcwd() + '/alp_' + str(alp9) + '_' + str(phi9) + '.dat', 'w')
+    for i in range(len(alp2)):
+        f1.write(str(alp2[i]) + '\t' + str(lst2[i]) + '\t' + str(phi2[i]) + '\n')
+    f1.close()
     # Integration array
-    rho2 = np.zeros(len(lst2))
+    rho2 = np.array([])
     # Integration starts
     for i in tqdm(range(10000)):
-        nor_sc1 = sandage(lums9=nor_lum, alp9=alp2[i], phi9=phi2[i], sig9=sig2[i], lst9=lst2[i])
-        nor_sc = nor_lum*nor_sc1#/phi2[j]
-        rho_nor = inte.simps(nor_sc, nor_lum)
-        rho2[i] = rho_nor
+        if lst2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
+            continue
+        else:
+            nor_sc1 = sandage(lums9=nor_lum, alp9=alp2[i], phi9=phi2[i], sig9=sig2[i], lst9=lst2[i])
+            nor_sc = nor_lum*nor_sc1#/phi2[j]
+            rho_nor = inte.simps(y=nor_sc, x=np.log10(nor_lum))
+            rho2 = np.hstack((rho2, rho_nor))
+    print("\nlength: ")
+    print(len(rho2))
     return rho2
 
 def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, kappa, limit=0.03):
@@ -103,6 +112,18 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
 
 
 lums_ir1 = np.logspace(6, 15, 10000)*con.L_sun.value*1e7
+
+lums_inte = np.logspace(np.log10(0.03*5.056e45), np.max(np.log10(lums_ir1)), 100000)
+san34 = sandage(lums9=lums_inte, alp9=1.22, phi9=0.000245, sig9=0.5, lst9=5.056e45)
+sam12 = san34*lums_inte
+sam_inte1 = inte.simps(y=sam12, x=np.log10(lums_inte))
+
+print('Luminosity density is (in cgs): {:.2e}'.format(sam_inte1))
+
+sfrd_12 = 4.5*10**(-44)*sam_inte1
+
+print('log(SFRD) (in M_sun year-1): {:.2e}'.format(np.log10(sfrd_12)))
+
 sf9, sfe9 = sfrd_w_err(lum=lums_ir1, lst9=5.056e45, lst9err=5.526e45, phi9=0.000420, \
     phi9err=0.000245, sig9=0.5, sig9err=0, alp9=1.22, alp9err=0.16, kappa=4.5*10**(-44), limit=0.03)
 
