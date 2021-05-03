@@ -67,3 +67,35 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
         rho_nor = inte.simps(nor_sc, nor_lum)
         rho2[i] = rho_nor
     return rho2
+
+def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, kappa, limit=0.03):
+    """
+    Function to calculate star formation rate density
+    -------------------------------------------------
+    Parameters:
+    -----------
+    lum : float, numpy.ndarray
+        luminosity range
+    lst9, phi9, sig9, alp9 : float
+        LF parameters
+    lst9err, phi9err, sig9err, alp9err : float
+        errors in LF parameters
+    kappa : float
+        conversion factor b/w luminosity density and
+        star formation rate
+    limit : float
+        lower limit of the intensity
+        as a function of L*
+        default is 0.03 (from Madau&Dickinson)
+    -----------
+    return
+    -----------
+    float
+        mean star formation rate
+    float
+        error in star formation rate
+    """
+    lum_den2 = lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, limit)
+    kpp1 = kappa
+    sfr2 = kpp1*lum_den2
+    return np.mean(sfr2), np.std(sfr2)
