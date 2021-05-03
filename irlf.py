@@ -59,10 +59,6 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     sig2 = np.random.normal(sig9, sig9err, 10000)
     # Values of luminosities
     nor_lum = np.logspace(np.log10(limit*lst9), np.max(np.log10(lum)), 100000)
-    f1 = open(os.getcwd() + '/alp_' + str(alp9) + '_' + str(phi9) + '.dat', 'w')
-    for i in range(len(alp2)):
-        f1.write(str(alp2[i]) + '\t' + str(lst2[i]) + '\t' + str(phi2[i]) + '\n')
-    f1.close()
     # Integration array
     rho2 = np.array([])
     # Integration starts
