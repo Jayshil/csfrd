@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate as inte
+import astropy.constants as con
 from tqdm import tqdm
 import os
 import utils as utl
@@ -99,3 +100,11 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
+
+
+lums_ir1 = np.logspace(6, 15, 10000)*con.L_sun.value*1e7
+sf9, sfe9 = sfrd_w_err(lum=lums_ir1, lst9=5.056e45, lst9err=5.526e45, phi9=0.000420, \
+    phi9err=0.000245, sig9=0.5, sig9err=0, alp9=1.22, alp9err=0.16, kappa=4.5*10**(-44), limit=0.03)
+
+print(sf9)
+print(sfe9)
