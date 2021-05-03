@@ -55,7 +55,7 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     # Values of Parameters
     lst2 = np.random.normal(lst9, lst9err, 10000)
     phi2 = np.random.normal(phi9, phi9err, 10000)
-    alp2 = np.random.normal(alp9, alp9, 10000)
+    alp2 = np.random.normal(alp9, alp9err, 10000)
     sig2 = np.random.normal(sig9, sig9err, 10000)
     # Values of luminosities
     nor_lum = np.logspace(np.log10(limit*lst9), np.max(np.log10(lum)), 100000)
@@ -70,12 +70,14 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
         if lst2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
+            #nor_lum = np.logspace(np.log10(limit*lst9), np.max(np.log10(lum)), 100000)
             nor_sc1 = sandage(lums9=nor_lum, alp9=alp2[i], phi9=phi2[i], sig9=sig2[i], lst9=lst2[i])
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(y=nor_sc, x=np.log10(nor_lum))
             rho2 = np.hstack((rho2, rho_nor))
     print("\nlength: ")
     print(len(rho2))
+    print(np.mean(rho2))
     return rho2
 
 def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, kappa, limit=0.03):
@@ -109,23 +111,3 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     kpp1 = kappa
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
-
-
-lums_ir1 = np.logspace(6, 15, 10000)*con.L_sun.value*1e7
-
-lums_inte = np.logspace(np.log10(0.03*5.056e45), np.max(np.log10(lums_ir1)), 100000)
-san34 = sandage(lums9=lums_inte, alp9=1.22, phi9=0.000245, sig9=0.5, lst9=5.056e45)
-sam12 = san34*lums_inte
-sam_inte1 = inte.simps(y=sam12, x=np.log10(lums_inte))
-
-print('Luminosity density is (in cgs): {:.2e}'.format(sam_inte1))
-
-sfrd_12 = 4.5*10**(-44)*sam_inte1
-
-print('log(SFRD) (in M_sun year-1): {:.2e}'.format(np.log10(sfrd_12)))
-
-sf9, sfe9 = sfrd_w_err(lum=lums_ir1, lst9=5.056e45, lst9err=5.526e45, phi9=0.000420, \
-    phi9err=0.000245, sig9=0.5, sig9err=0, alp9=1.22, alp9err=0.16, kappa=4.5*10**(-44), limit=0.03)
-
-print(sf9)
-print(sfe9)
