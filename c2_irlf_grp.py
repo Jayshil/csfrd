@@ -111,6 +111,7 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
 
+"""
 sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[0], lst9err=logl_err[0], \
         phi9=logp[0], phi9err=logp_err[0], sig9=sig[0], sig9err=sig_err[0], alp9=alp[0], \
         alp9err=alp_err[0], kappa=kap_ir, limit=limit1)
@@ -131,4 +132,3 @@ for j in range(len(zcen)):
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
-"""
