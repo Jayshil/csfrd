@@ -126,7 +126,7 @@ f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
 
 
 for j in range(len(zcen)):
-    sfrd_ir, sfrd_err_ir = irlf.sfrd_w_err(lum=lums_ir1, lst9=logl[j], lst9err=logl_err[j], \
+    sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[j], lst9err=logl_err[j], \
         phi9=logp[j], phi9err=logp_err[j], sig9=sig[j], sig9err=sig_err[j], alp9=alp[j], \
         alp9err=alp_err[j], kappa=kap_ir, limit=limit1)
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
