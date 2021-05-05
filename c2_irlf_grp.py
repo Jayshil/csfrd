@@ -24,7 +24,7 @@ limit1 = 1e8*((con.L_sun.to(u.erg/u.s)).value)
 
 # Defining Kappa and the range of luminosities over which we want to perform integration
 kap_ir = 4.5*10**(-44)
-lums_ir1 = np.logspace(10, 13, 10000)*con.L_sun.value*1e7
+lums_ir1 = np.logspace(10, 13, 10000)*(con.L_sun.to(u.erg/u.s).value)
 
 # Location of the results file
 p2 = os.getcwd() + '/Results/'
@@ -53,19 +53,19 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     """
     # Values of Parameters
     # For L*
-    lst7 = np.random.normal(lst9, lst9err, 10000)
+    lst7 = np.random.normal(lst9, lst9err, 100000)
     lst2 = (10**lst7)*((con.L_sun.to(u.erg/u.s)).value)
-    phi7 = np.random.normal(phi9, phi9err, 10000)
+    phi7 = np.random.normal(phi9, phi9err, 100000)
     phi2 = 10**phi7
     # For alpha and sigma
-    alp2 = np.random.normal(alp9, alp9err, 10000)
-    sig2 = np.random.normal(sig9, sig9err, 10000)
+    alp2 = np.random.normal(alp9, alp9err, 100000)
+    sig2 = np.random.normal(sig9, sig9err, 100000)
     # Values of luminosities
     nor_lum = np.logspace(np.log10(limit), np.max(np.log10(lum)), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
-    for i in tqdm(range(10000)):
+    for i in tqdm(range(100000)):
         if lst2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
@@ -120,6 +120,18 @@ print(sfrd_ir)
 print(sfrd_err_ir)
 
 """
+
+# Without errors
+for i in range(len(zcen)):
+    sam = np.logspace(np.log10(limit1), np.max(np.log10(lums_ir1)), 100000)
+    lf = irlf.sandage(lums9=sam, alp9=alp[i], phi9=10**logp[i], sig9=sig[i], lst9=(10**logl[i])*(con.L_sun.to(u.erg/u.s).value))
+    nor = sam*lf
+    rho = inte.simps(y=nor, x=np.log10(sam))
+    sfrd = rho*kap_ir
+    print('For redshift: ', zcen[i])
+    print('SFRD: ', sfrd)
+    print('log(SFRD): ', np.log10(sfrd))
+
 # Performing the integration
 f33 = open(p2 + 'sfrd_grp_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
