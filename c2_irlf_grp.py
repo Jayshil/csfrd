@@ -16,7 +16,7 @@ zcen = (zdo + zup)/2
 alp, alp_err = np.array([1.22, 1.15, 1.08, 1.25, 1.28]), np.array([0.16, 0.145, 0.14, 0.49, 0.47])
 logl, logl_err = np.array([11.95, 12.01, 12.12, 11.90, 12.16]), np.array([0.385, 0.395, 0.22, 0.54, 0.805])
 logp, logp_err = np.array([-3.44, -3.45, -3.32, -3.43, -3.73]), np.array([0.235, 0.185, 0.145, 0.445, 0.50])
-sig, sig_err = 0.5*np.ones(len(zcen)), 0.*np.ones(len(zcen))
+sig, sig_err = 0.5*np.ones(len(zcen)), np.zeros(len(zcen))
 
 # Lower limit of integration
 limit1 = 1e8*((con.L_sun.to(u.erg/u.s)).value)
@@ -24,7 +24,7 @@ limit1 = 1e8*((con.L_sun.to(u.erg/u.s)).value)
 
 # Defining Kappa and the range of luminosities over which we want to perform integration
 kap_ir = 4.5*10**(-44)
-lums_ir1 = np.logspace(6, 15, 10000)*con.L_sun.value*1e7
+lums_ir1 = np.logspace(10, 13, 10000)*con.L_sun.value*1e7
 
 # Location of the results file
 p2 = os.getcwd() + '/Results/'
@@ -55,7 +55,6 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     # For L*
     lst7 = np.random.normal(lst9, lst9err, 10000)
     lst2 = (10**lst7)*((con.L_sun.to(u.erg/u.s)).value)
-    # For phi*
     phi7 = np.random.normal(phi9, phi9err, 10000)
     phi2 = 10**phi7
     # For alpha and sigma
@@ -112,6 +111,14 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
 
+sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[0], lst9err=logl_err[0], \
+        phi9=logp[0], phi9err=logp_err[0], sig9=sig[0], sig9err=sig_err[0], alp9=alp[0], \
+        alp9err=alp_err[0], kappa=kap_ir, limit=limit1)
+
+print(sfrd_ir)
+print(sfrd_err_ir)
+
+"""
 # Performing the integration
 f33 = open(p2 + 'sfrd_grp_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
@@ -124,3 +131,4 @@ for j in range(len(zcen)):
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
+"""
