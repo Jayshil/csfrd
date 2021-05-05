@@ -53,19 +53,25 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     """
     # Values of Parameters
     # For L*
-    lst7 = np.random.normal(lst9, lst9err, 100000)
+    lst7 = np.random.normal(lst9, lst9err, 10000)
     lst2 = (10**lst7)*((con.L_sun.to(u.erg/u.s)).value)
-    phi7 = np.random.normal(phi9, phi9err, 100000)
+    print('\nL*')
+    print(np.mean(lst2))
+    print(np.std(lst2))
+    phi7 = np.random.normal(phi9, phi9err, 10000)
     phi2 = 10**phi7
+    print('\nphi*')
+    print(np.mean(phi2))
+    print(np.std(phi2))
     # For alpha and sigma
-    alp2 = np.random.normal(alp9, alp9err, 100000)
-    sig2 = np.random.normal(sig9, sig9err, 100000)
+    alp2 = np.random.normal(alp9, alp9err, 10000)
+    sig2 = np.random.normal(sig9, sig9err, 10000)
     # Values of luminosities
     nor_lum = np.logspace(np.log10(limit), np.max(np.log10(lum)), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
-    for i in tqdm(range(100000)):
+    for i in tqdm(range(10000)):
         if lst2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
