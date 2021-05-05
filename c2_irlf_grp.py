@@ -11,13 +11,23 @@ import irlf as irlf
 # LF Parameters
 zdo = np.array([0.5, 1.5, 2.5, 3.5, 4.5])
 zup = np.array([1.5, 2.5, 3.5, 4.5, 6.0])
+zcen = (zdo + zup)/2
 
 alp, alp_err = np.array([1.22, 1.15, 1.08, 1.25, 1.28]), np.array([0.16, 0.145, 0.14, 0.49, 0.47])
 logl, logl_err = np.array([11.95, 12.01, 12.12, 11.90, 12.16]), np.array([0.385, 0.395, 0.22, 0.54, 0.805])
 logp, logp_err = np.array([-3.44, -3.45, -3.32, -3.43, -3.73]), np.array([0.235, 0.185, 0.145, 0.445, 0.50])
+sig, sig_err = 0.5*np.ones(len(zcen)), 0.*np.ones(len(zcen))
 
 # Lower limit of integration
 limit1 = 1e8*((con.L_sun.to(u.erg/u.s)).value)
+
+
+# Defining Kappa and the range of luminosities over which we want to perform integration
+kap_ir = 4.5*10**(-44)
+lums_ir1 = np.logspace(6, 15, 10000)*con.L_sun.value*1e7
+
+# Location of the results file
+p2 = os.getcwd() + '/Results/'
 
 def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, limit):
     """
@@ -102,3 +112,17 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
 
+# Performing the integration
+f33 = open(p2 + 'sfrd_grp_new.dat','w')
+f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
+
+
+for j in range(len(zcen)):
+    sfrd_ir, sfrd_err_ir = irlf.sfrd_w_err(lum=lums_ir1, lst9=logl[j], lst9err=logl_err[j], \
+        phi9=logp[j], phi9err=logp_err[j], sig9=sig[j], sig9err=sig_err[j], alp9=alp[j], \
+        alp9err=alp_err[j], kappa=kap_ir, limit=limit1)
+    sfrd_ir12 = np.hstack((sfrd_ir12, sfrd_ir))
+    sfrd_ir12_err = np.hstack((sfrd_ir12_err, sfrd_err_ir))
+    f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
+
+f33.close()
