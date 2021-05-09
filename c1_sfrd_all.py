@@ -18,7 +18,7 @@ p1 = os.getcwd() + '/data/New_UV/'
 
 # To save the results
 p22 = os.getcwd() + '/Results/'
-f22 = open(p22 + 'sfrd_new_all.dat', 'w')
+f22 = open(p22 + 'sfrd_uv_new.dat', 'w')
 f22.write('#Name_of_the_paper\tZ_up\tZ_down\tSFRD\n')
 
 # List of data files
