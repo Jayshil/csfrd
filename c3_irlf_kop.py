@@ -29,34 +29,6 @@ lums_ir1 = np.logspace(24,27,100)*utl.lam_to_nu(2500000)*1e7
 # Location of the results file
 p2 = os.getcwd() + '/Results/'
 
-
-def schechter(lum, phi1, lum1, alpha):
-    """
-    The Schechter Function
-    ----------------------
-    Paramters:
-    ----------
-    lum : float, numpy.ndarray
-        input luminosities of the galaxies
-    phi1 : float
-        normalisation constant
-    lum1 : float
-        characteristic luminosity
-        the 'knee' of the function
-    alpha : float
-        the faint-end slope of power-law function
-    ----------
-    returns:
-    ----------
-    float or numpy.ndarray
-        number of galaxies in given luminosity range
-    """
-    ab = phi1
-    cd = (np.abs(lum/lum1))**alpha
-    expp = np.exp(-np.abs(lum/lum1))
-    xy = ab*cd*expp
-    return xy
-
 def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     """
     Function to calculate luminosity density
@@ -107,7 +79,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
         if lum2[i] < 0 :#alp2[i] != alp2[i] or lum2[i] != lum2[i] or lum2[i] == 0 or phi2[i] != phi2[i]:
             continue
         else:
-            nor_sc1 = schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
+            nor_sc1 = utl.schechter(nor_lum, lum1=lum2[i], phi1=phi2[i], alpha=alp2[i])
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(nor_sc, nor_lum)
             rho2 = np.hstack((rho2, rho_nor))
