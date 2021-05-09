@@ -71,7 +71,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Use only certain precision
     # Values of luminosities
-    nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
+    nor_lum = np.linspace(limit*np.mean(lum2), np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts

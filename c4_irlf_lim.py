@@ -22,9 +22,8 @@ limit1 = 0.03
 
 
 # Defining Kappa and the range of luminosities over which we want to perform integration
-kap_ir = 0.68*4.5*10**(-44)
-lums_ir1 = np.logspace(24,27,100)*con.L_sun*1e7
-#print(lums_ir1)
+kap_ir = 4.5*10**(-44)
+lums_ir1 = np.logspace(10,14,100)*(con.L_sun.value)*1e7
 
 # Location of the results file
 p2 = os.getcwd() + '/Results/'
@@ -63,7 +62,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     # Values of Parameters
     # For L*
     lum9 = np.random.normal(lum1, lum1err, 10000)
-    lum2 = (10**lum9)*utl.lam_to_nu(2500000)*1e7
+    lum2 = (10**lum9)*(con.L_sun.value)*1e7
     # For phi*
     phi9 = np.random.normal(phi1, phi1err, 10000)
     phi2 = 10**phi9
@@ -71,7 +70,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Use only certain precision
     # Values of luminosities
-    nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
+    nor_lum = np.linspace(limit*np.mean(lum2), np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
@@ -129,11 +128,17 @@ def sfrd_w_err(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, kappa, limit=
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
 
+
 """
+for i in range(len(zcen)):
+    ab = 0.03*(10**logl[i])*con.L_sun.value*1e7
+    print(ab)
+
 # Without errors
 for i in range(len(zcen)):
-    sam = np.logspace(np.log10(limit1), np.max(np.log10(lums_ir1)), 100000)
-    lf = irlf.sandage(lums9=sam, alp9=alp[i], phi9=10**logp[i], sig9=sig[i], lst9=(10**logl[i])*(con.L_sun.to(u.erg/u.s).value))
+    sam = np.linspace(0.03*(10**logl[i])*con.L_sun.value*1e7, np.max(lums_ir1), 100000)
+    print(sam)
+    lf = utl.schechter(sam, phi1=10**(logp[i]), lum1=(10**logl[i])*con.L_sun.value*1e7, alpha=alp[i])
     nor = sam*lf
     rho = inte.simps(y=nor, x=np.log10(sam))
     sfrd = rho*kap_ir
@@ -142,13 +147,14 @@ for i in range(len(zcen)):
     print('log(SFRD): ', np.log10(sfrd))
 """
 
+
 # Performing the integration
 f33 = open(p2 + 'sfrd_lim_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
 
 for j in range(len(zcen)):
     sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lum1=logl[j], lum1err=logl_err[j],\
-         phi1=logp[j], phi1err=logp_err[j], alpha=alp[j], alphaerr=alp_err[j], kappa=kap_ir, limit=0.01)
+         phi1=logp[j], phi1err=logp_err[j], alpha=alp[j], alphaerr=alp_err[j], kappa=kap_ir, limit=0.03)
     f33.write('Lim_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
