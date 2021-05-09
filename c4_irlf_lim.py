@@ -143,7 +143,7 @@ for i in range(len(zcen)):
 """
 
 # Performing the integration
-f33 = open(p2 + 'sfrd_kop_new.dat','w')
+f33 = open(p2 + 'sfrd_lim_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
 
 for j in range(len(zcen)):
