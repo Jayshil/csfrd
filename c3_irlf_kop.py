@@ -22,7 +22,7 @@ limit1 = 0.01
 
 
 # Defining Kappa and the range of luminosities over which we want to perform integration
-kap_ir = 4.5*10**(-44)
+kap_ir = 0.68*4.5*10**(-44)
 lums_ir1 = np.logspace(24,27,100)*utl.lam_to_nu(2500000)*1e7
 #print(lums_ir1)
 
