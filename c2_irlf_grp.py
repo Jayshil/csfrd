@@ -138,6 +138,7 @@ for i in range(len(zcen)):
     print('SFRD: ', sfrd)
     print('log(SFRD): ', np.log10(sfrd))
 
+"""
 # Performing the integration
 f33 = open(p2 + 'sfrd_grp_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
@@ -150,3 +151,4 @@ for j in range(len(zcen)):
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
+"""
