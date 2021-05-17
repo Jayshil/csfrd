@@ -17,8 +17,8 @@ lums_all = utl.m_to_l_wave(mags_all, 1500)
 p1 = os.getcwd() + '/data/New_UV/'
 
 # To save the results
-p22 = os.getcwd() + '/Results/'
-f22 = open(p22 + 'sfrd_uv_new.dat', 'w')
+p22 = os.getcwd() + '/Results/Diff_lim'
+f22 = open(p22 + 'sfrd_uv_new1.dat', 'w')
 f22.write('#Name_of_the_paper\tZ_up\tZ_down\tSFRD\n')
 
 # List of data files
@@ -55,7 +55,8 @@ for i in range(len(list_uv)):
         mean_all = np.array([mst_uv[j], logphi, alp_uv[j]])
         err_all = np.array([msterr_uv[j], logphi_err, alperr_uv[j]])
         zcen = (z1_uv[j] + z2_uv[j])/2
-        sfr2, sfr2e = cov.sfrd_w_err(lum=lums_all, z=zcen, mean2=mean_all, err2=err_all, kappa=kap_uv, limit=0.03)
+        lst11 = utl.m_to_l_wave(mean_all[0], 1500)
+        sfr2, sfr2e = cov.sfrd_w_err(lum=lums_all, z=zcen, mean2=mean_all, err2=err_all, kappa=kap_uv, limit=0.03*lst11)
         sfrd_uv[j], sfrd_uv_err[j] = sfr2, sfr2e
         f22.write(ppr_n[0] + '\t' + str(z1_uv[j]) + '\t' + str(z2_uv[j]) + '\t' + str(sfr2) + '\t' + str(sfr2e) + '\n')
     #

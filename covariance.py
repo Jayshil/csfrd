@@ -147,9 +147,9 @@ def lum_den22(lum, z, mean1, err1, limit=0.03):
     """
     # Values of Parameters
     lum2, phi2, alp2 = corr_para(z=z, means=mean1, err=err1)
-    lum1 = utl.m_to_l_wave(mean1[0], 1500)
+    #lum1 = utl.m_to_l_wave(mean1[0], 1500)
     # Values of luminosities
-    nor_lum = np.linspace(limit*lum1, np.max(lum), 100000)
+    nor_lum = np.linspace(limit, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
