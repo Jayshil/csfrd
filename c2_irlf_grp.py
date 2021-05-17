@@ -53,21 +53,23 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     """
     # Values of Parameters
     # For L*
-    lst7 = np.random.normal(lst9, lst9err, 10000)
-    lst2 = (10**lst7)*((con.L_sun.to(u.erg/u.s)).value)
-    print('\nL*')
-    print(np.mean(lst2))
-    print(np.std(lst2))
-    phi7 = np.random.normal(phi9, phi9err, 10000)
-    phi2 = 10**phi7
-    print('\nphi*')
-    print(np.mean(phi2))
-    print(np.std(phi2))
+    lst7 = np.random.lognormal(lst9*np.log(10), lst9err*np.log(10), 10000)
+    lst2 = (lst7)*((con.L_sun.to(u.erg/u.s)).value)
+    lst3 = (10**lst9)*((con.L_sun.to(u.erg/u.s)).value)
+    #print(lst3)
+    #print('\nL*')
+    #print(np.mean(lst2))
+    #print(np.std(lst2))
+    phi7 = np.random.lognormal(phi9*np.log(10), phi9err*np.log(10), 10000)
+    phi2 = phi7
+    #print('\nphi*')
+    #print(np.mean(phi2))
+    #print(np.std(phi2))
     # For alpha and sigma
     alp2 = np.random.normal(alp9, alp9err, 10000)
     sig2 = np.random.normal(sig9, sig9err, 10000)
     # Values of luminosities
-    nor_lum = np.logspace(np.log10(limit*np.mean(lst2)), np.max(np.log10(lum)), 100000)
+    nor_lum = np.logspace(np.log10(limit*lst3), np.max(np.log10(lum)), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
@@ -120,12 +122,11 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
 """
 sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[0], lst9err=logl_err[0], \
         phi9=logp[0], phi9err=logp_err[0], sig9=sig[0], sig9err=sig_err[0], alp9=alp[0], \
-        alp9err=alp_err[0], kappa=kap_ir, limit=limit1)
+        alp9err=alp_err[0], kappa=kap_ir, limit=0.03)
 
 print(sfrd_ir)
 print(sfrd_err_ir)
 
-"""
 
 # Without errors
 for i in range(len(zcen)):
@@ -137,8 +138,8 @@ for i in range(len(zcen)):
     print('For redshift: ', zcen[i])
     print('SFRD: ', sfrd)
     print('log(SFRD): ', np.log10(sfrd))
-
 """
+
 # Performing the integration
 f33 = open(p2 + 'sfrd_grp_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
@@ -151,4 +152,4 @@ for j in range(len(zcen)):
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
-"""
+#"""
