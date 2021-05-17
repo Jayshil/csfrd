@@ -55,13 +55,13 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     """
     # Values of Parameters
     # For L*
-    lst7 = np.random.normal(lst9, lst9err, 10000)
-    lst2 = (10**lst7)*((con.L_sun.to(u.erg/u.s)).value)
+    lst7 = np.random.lognormal(lst9*np.log(10), lst9err*np.log(10), 10000)
+    lst2 = (lst7)*((con.L_sun.to(u.erg/u.s)).value)
     #print('\nL*')
     #print(np.mean(lst2))
     #print(np.std(lst2))
-    phi7 = np.random.normal(phi9, phi9err, 10000)
-    phi2 = 10**phi7
+    phi7 = np.random.lognormal(phi9*np.log(10), phi9err*np.log(10), 10000)
+    phi2 = phi7
     #print('\nphi*')
     #print(np.mean(phi2))
     #print(np.std(phi2))
