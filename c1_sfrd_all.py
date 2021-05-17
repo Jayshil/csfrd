@@ -17,7 +17,7 @@ lums_all = utl.m_to_l_wave(mags_all, 1500)
 p1 = os.getcwd() + '/data/New_UV/'
 
 # To save the results
-p22 = os.getcwd() + '/Results/Diff_lim'
+p22 = os.getcwd() + '/Results/Diff_lim/'
 f22 = open(p22 + 'sfrd_uv_new035.dat', 'w')
 f22.write('#Name_of_the_paper\tZ_up\tZ_down\tSFRD\n')
 
