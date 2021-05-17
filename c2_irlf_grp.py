@@ -67,7 +67,7 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     #print(np.std(phi2))
     # For alpha and sigma
     alp2 = np.random.normal(alp9, alp9err, 10000)
-    sig2 = np.random.normal(sig9, sig9err, 10000)
+    #sig2 = np.random.normal(sig9, sig9err, 100000)
     # Values of luminosities
     nor_lum = np.logspace(np.log10(limit*lst3), np.max(np.log10(lum)), 100000)
     # Integration array
@@ -78,7 +78,7 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
             continue
         else:
             #nor_lum = np.logspace(np.log10(limit*lst9), np.max(np.log10(lum)), 100000)
-            nor_sc1 = irlf.sandage(lums9=nor_lum, alp9=alp2[i], phi9=phi2[i], sig9=sig2[i], lst9=lst2[i])
+            nor_sc1 = irlf.sandage(lums9=nor_lum, alp9=alp2[i], phi9=phi2[i], sig9=0.5, lst9=lst2[i])
             nor_sc = nor_lum*nor_sc1#/phi2[j]
             rho_nor = inte.simps(y=nor_sc, x=np.log10(nor_lum))
             rho2 = np.hstack((rho2, rho_nor))
