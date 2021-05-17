@@ -56,7 +56,7 @@ for i in range(len(list_uv)):
         err_all = np.array([msterr_uv[j], logphi_err, alperr_uv[j]])
         zcen = (z1_uv[j] + z2_uv[j])/2
         #lst11 = utl.m_to_l_wave(mean_all[0], 1500)
-        lt1 = 0.35/kap_uv
+        lt1 = 0.1/kap_uv
         sfr2, sfr2e = cov.sfrd_w_err(lum=lums_all, z=zcen, mean2=mean_all, err2=err_all, kappa=kap_uv, limit=lt1)
         sfrd_uv[j], sfrd_uv_err[j] = sfr2, sfr2e
         f22.write(ppr_n[0] + '\t' + str(z1_uv[j]) + '\t' + str(z2_uv[j]) + '\t' + str(sfr2) + '\t' + str(sfr2e) + '\n')
