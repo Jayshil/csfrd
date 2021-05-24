@@ -14,11 +14,11 @@ mags_all = np.linspace(-24, -13, 10)
 lums_all = utl.m_to_l_wave(mags_all, 1500)
 
 # Location of new data
-p1 = os.getcwd() + '/data/New_UV/'
+p1 = os.getcwd() + '/data/New_UV1/'
 
 # To save the results
 p22 = os.getcwd() + '/Results/Diff_lim/'
-f22 = open(p22 + 'sfrd_uv_new000001.dat', 'w')
+f22 = open(p22 + 'sfrd_uv_new000001_new.dat', 'w')
 f22.write('#Name_of_the_paper\tZ_up\tZ_down\tSFRD\n')
 
 # List of data files
