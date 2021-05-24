@@ -14,7 +14,7 @@ mags_all = np.linspace(-24, -13, 10)
 lums_all = utl.m_to_l_wave(mags_all, 1500)
 
 # Location of new data
-p1 = os.getcwd() + '/data/New_UV1/'
+p1 = os.getcwd() + '/data/New_UV/'
 
 # To save the results
 p22 = os.getcwd() + '/Results/Diff_lim/'
