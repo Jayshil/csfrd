@@ -130,7 +130,7 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
 
 # Without errors
 for i in range(len(zcen)):
-    lt11 = 0.035/kap_ir
+    lt11 = 0.35/kap_ir
     sam = np.logspace(np.log10(lt11), np.max(np.log10(lums_ir1)), 100000)
     lf = irlf.sandage(lums9=sam, alp9=alp[i], phi9=10**logp[i], sig9=sig[i], lst9=(10**logl[i])*(con.L_sun.to(u.erg/u.s).value))
     nor = sam*lf
