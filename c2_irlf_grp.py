@@ -69,7 +69,7 @@ def lum_den22(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, l
     alp2 = np.random.normal(alp9, alp9err, 10000)
     #sig2 = np.random.normal(sig9, sig9err, 100000)
     # Values of luminosities
-    nor_lum = np.logspace(np.log10(limit*lst3), np.max(np.log10(lum)), 100000)
+    nor_lum = np.logspace(np.log10(limit), np.max(np.log10(lum)), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
@@ -119,18 +119,19 @@ def sfrd_w_err(lum, lst9, lst9err, phi9, phi9err, sig9, sig9err, alp9, alp9err, 
     sfr2 = kpp1*lum_den2
     return np.mean(sfr2), np.std(sfr2)
 
-"""
-sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[0], lst9err=logl_err[0], \
-        phi9=logp[0], phi9err=logp_err[0], sig9=sig[0], sig9err=sig_err[0], alp9=alp[0], \
-        alp9err=alp_err[0], kappa=kap_ir, limit=0.03)
+#"""
+#sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lst9=logl[0], lst9err=logl_err[0], \
+        #phi9=logp[0], phi9err=logp_err[0], sig9=sig[0], sig9err=sig_err[0], alp9=alp[0], \
+        #alp9err=alp_err[0], kappa=kap_ir, limit=0.03)
 
-print(sfrd_ir)
-print(sfrd_err_ir)
+#print(sfrd_ir)
+#print(sfrd_err_ir)
 
 
 # Without errors
 for i in range(len(zcen)):
-    sam = np.logspace(np.log10(limit1), np.max(np.log10(lums_ir1)), 100000)
+    lt11 = 0.035/kap_ir
+    sam = np.logspace(np.log10(lt11), np.max(np.log10(lums_ir1)), 100000)
     lf = irlf.sandage(lums9=sam, alp9=alp[i], phi9=10**logp[i], sig9=sig[i], lst9=(10**logl[i])*(con.L_sun.to(u.erg/u.s).value))
     nor = sam*lf
     rho = inte.simps(y=nor, x=np.log10(sam))
@@ -152,4 +153,4 @@ for j in range(len(zcen)):
     f33.write('Gruppioni_et_al_2020' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
-#"""
+"""
