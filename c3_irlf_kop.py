@@ -71,7 +71,7 @@ def lum_den22(lum, lum1, lum1err, phi1, phi1err, alpha, alphaerr, limit=0.03):
     alp2 = np.random.normal(alpha, alphaerr, 10000)
     # Use only certain precision
     # Values of luminosities
-    nor_lum = np.linspace(limit*np.mean(lum2), np.max(lum), 100000)
+    nor_lum = np.linspace(limit, np.max(lum), 100000)
     # Integration array
     rho2 = np.array([])
     # Integration starts
@@ -147,8 +147,9 @@ f33 = open(p2 + 'sfrd_kop_new.dat','w')
 f33.write('#Name_of_the_paper\tZ_down\tZ_up\tSFRD\tSFRD_err\n')
 
 for j in range(len(zcen)):
+    ltt2 = 0.00001/kap_ir
     sfrd_ir, sfrd_err_ir = sfrd_w_err(lum=lums_ir1, lum1=logl[j], lum1err=logl_err[j],\
-         phi1=logp[j], phi1err=logp_err[j], alpha=alp[j], alphaerr=alp_err[j], kappa=kap_ir, limit=0.01)
+         phi1=logp[j], phi1err=logp_err[j], alpha=alp[j], alphaerr=alp_err[j], kappa=kap_ir, limit=ltt2)
     f33.write('Koprowski_et_al_2017' + '\t' + str(zdo[j]) + '\t' + str(zup[j]) + '\t' + str(sfrd_ir) + '\t' + str(sfrd_err_ir) + '\n')
 
 f33.close()
